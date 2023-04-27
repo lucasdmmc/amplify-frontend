@@ -58,8 +58,6 @@ function App() {
         console.log(response)
         if (response.data.confidence > 90) {
           setLoading(true)
-        } if (!response.data.confidence > 90) {
-          setLoading(false)
         }
       })
     } catch (error) {
