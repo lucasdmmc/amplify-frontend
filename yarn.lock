@@ -99,21 +99,6 @@
     "@aws-amplify/core" "5.1.12"
     tslib "^1.8.0"
 
-"@aws-amplify/core@5.0.15":
-  version "5.0.15"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/core/-/core-5.0.15.tgz#4ec307ebba46877cffcae188794ad8453a39c508"
-  integrity sha512-BgskrlR/0oZSw8I1C8nuqiflzdbHcYr07+aSR0C7//mldtF594QzJaVE41R+s8lLsU4X7bLFTG1/oWUmswrkDg==
-  dependencies:
-    "@aws-crypto/sha256-js" "1.2.2"
-    "@aws-sdk/client-cloudwatch-logs" "3.6.1"
-    "@aws-sdk/client-cognito-identity" "3.6.1"
-    "@aws-sdk/credential-provider-cognito-identity" "3.6.1"
-    "@aws-sdk/types" "3.6.1"
-    "@aws-sdk/util-hex-encoding" "3.6.1"
-    tslib "^1.8.0"
-    universal-cookie "^4.0.4"
-    zen-observable-ts "0.8.19"
-
 "@aws-amplify/core@5.1.12":
   version "5.1.12"
   resolved "https://registry.yarnpkg.com/@aws-amplify/core/-/core-5.1.12.tgz#4d5e154010ff897ceaac49c1c7a770d22d03ec15"
@@ -294,14 +279,6 @@
     lodash "4.17.21"
     style-dictionary "3.7.1"
     tslib "2.4.1"
-
-"@aws-amplify/xr@^4.0.15":
-  version "4.0.15"
-  resolved "https://registry.yarnpkg.com/@aws-amplify/xr/-/xr-4.0.15.tgz#34d94a80f8e4c8c21bd349e74651723f8f480aa7"
-  integrity sha512-+yT5rzE49hGLXyylThWB1zZc6Kvxdwz7l2YykEFqsFbb70pfZayr4pYnhg+wcVYBN5jDLlF5Gc+oquzhc9oP8w==
-  dependencies:
-    "@aws-amplify/core" "5.0.15"
-    tslib "^1.8.0"
 
 "@aws-crypto/crc32@2.0.0":
   version "2.0.0"
@@ -5322,6 +5299,11 @@
   integrity sha512-d0O68AYy/9oeEy1DdC07bz1/ZXX+DqCskRd3i4JzLSTXwefzaepQrKjXC7aNM8lTHjFLDO0pDgaEiQ7jEk+HVg==
   dependencies:
     "@babel/runtime" "^7.13.10"
+
+"@remix-run/router@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.5.0.tgz#57618e57942a5f0131374a9fdb0167e25a117fdc"
+  integrity sha512-bkUDCp8o1MvFO+qxkODcbhSqRa6P2GXgrGZVpt0dCXNW2HCSCqYI0ZoAqEOSAjRWmmlKcYgFvN4B4S+zo/f8kg==
 
 "@sideway/address@^4.1.3":
   version "4.1.4"
@@ -12006,6 +11988,21 @@ react-remove-scroll@2.5.4:
     tslib "^2.1.0"
     use-callback-ref "^1.3.0"
     use-sidecar "^1.1.2"
+
+react-router-dom@^6.10.0:
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.10.0.tgz#090ddc5c84dc41b583ce08468c4007c84245f61f"
+  integrity sha512-E5dfxRPuXKJqzwSe/qGcqdwa18QiWC6f3H3cWXM24qj4N0/beCIf/CWTipop2xm7mR0RCS99NnaqPNjHtrAzCg==
+  dependencies:
+    "@remix-run/router" "1.5.0"
+    react-router "6.10.0"
+
+react-router@6.10.0:
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.10.0.tgz#230f824fde9dd0270781b5cb497912de32c0a971"
+  integrity sha512-Nrg0BWpQqrC3ZFFkyewrflCud9dio9ME3ojHCF/WLsprJVzkq3q3UeEhMCAW1dobjeGbWgjNn/PVF6m46ANxXQ==
+  dependencies:
+    "@remix-run/router" "1.5.0"
 
 react-server-dom-webpack@0.0.0-experimental-c8b778b7f-20220825:
   version "0.0.0-experimental-c8b778b7f-20220825"
