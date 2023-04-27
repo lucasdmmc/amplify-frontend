@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ThemeProvider, useTheme, Theme, View, Heading, Text, Alert, Card } from '@aws-amplify/ui-react';
+import { ThemeProvider, useTheme } from '@aws-amplify/ui-react';
 import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
@@ -67,7 +67,12 @@ function App() {
 
   useEffect(() => {
     createSession()
+
+    if(loading) {
+      return <></>
+    }
   },[])
+
   return (
     <>
       <>
@@ -80,19 +85,7 @@ function App() {
               sessionId={createLivenessApiData}
               region='us-east-1'
               onAnalysisComplete={handleAnalysisComplete}
-              components={{
-                Header: () => {
-                  return (
-                    <View>
-                      <Heading>{createLivenessApiData}</Heading>
-                      <Text>
-                        You will go through a face verification process to prove that
-                        you are a real person.
-                      </Text>
-                    </View>
-                  );
-                },
-              }} />
+            />
           ) : (
             <p>Carregando...</p>
           )}
