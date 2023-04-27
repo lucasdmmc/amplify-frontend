@@ -12,6 +12,7 @@ Amplify.configure(awsExports);
 
 function App() {
   const [createLivenessApiData, setCreateLivenessApiData] = useState("");
+  const [ loading, setLoading ] = useState(Boolean);
   const { tokens } = useTheme();
 
   const theme = {
