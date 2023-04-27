@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ThemeProvider, useTheme, Theme, View, Heading, Text, Alert, Card } from '@aws-amplify/ui-react';
+import { Loader, ThemeProvider, useTheme, Theme, View, Heading, Text, Alert, Card } from '@aws-amplify/ui-react';
 import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
@@ -8,9 +8,10 @@ import { api } from '../services/api';
 
 Amplify.configure(awsExports);
 
+
+
 function App() {
-  const [loading, setLoading] = useState(true);
-  const [createLivenessApiData, setCreateLivenessApiData] = useState(null);
+  const [createLivenessApiData, setCreateLivenessApiData] = useState("");
   const { tokens } = useTheme();
 
   const theme = {
@@ -42,20 +43,34 @@ function App() {
     }
   }
 
+  const handleAnalysisComplete = async () => {
+    setCreateLivenessApiData(null)
+    const response = await api.get(`/api/getFaceLivenessResults?sessionId=${createLivenessApiData}`);
+    setCreateLivenessApiData(response.data.sessionId)
+    console.log(response)
+    const data = await response.json();
+    console.log(data)
+  }
   useEffect(() => {
-    function fetchTeste() {
+    const fetchCreateLiveness = async () => {
+      
       api.get("/api/createSession")
       .then(response => setCreateLivenessApiData(response.data.sessionId))
+      
     }
-
-    fetchTeste();
+    
+    fetchCreateLiveness();
   },[])
   return (
     <ThemeProvider theme={theme} >
+      {!createLivenessApiData ? (
+        <Loader width={200}/>
+      ) : (
+        
       <FaceLivenessDetector
         sessionId={createLivenessApiData}
-        region='us-east-2'
-
+        region='us-east-1'
+        onAnalysisComplete={handleAnalysisComplete}
         components={{
           Header: () => {
             return (
@@ -80,28 +95,11 @@ function App() {
               </Alert>
             )
           },
-          // Instructions: () => {
-          //   return (
-          //     <Card variation="elevated">
-          //       Instructions to follow to use Face Liveness detector
-          //       <ol>
-          //         <li>
-          //           Make sure your face is not covered with sunglasses or a mask.
-          //         </li>
-          //         <li>
-          //           Move to a well-lit place that is not dark or in direct
-          //           sunlight.
-          //         </li>
-          //         <li>
-          //           Fill onscreen oval with your face and hold for colored lights.
-          //         </li>
-          //       </ol>
-          //     </Card>
-          //   )
-          // }
-          
+         
         }}
       />
+      //catch
+      )}
     </ThemeProvider>
   );
 }
