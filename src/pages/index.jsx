@@ -58,8 +58,6 @@ function App() {
         console.log(response)
         if (response.data.confidence > 90) {
           setLoading(true)
-        } else {
-          setLoading(false)
         }
       })
     } catch (error) {
@@ -71,35 +69,34 @@ function App() {
     createSession()
   },[])
   return (
-    <ThemeProvider theme={theme} >
-      {createLivenessApiData ? (
-        <FaceLivenessDetector
-        sessionId={createLivenessApiData}
-        region='us-east-1'
-        onAnalysisComplete={handleAnalysisComplete}
-        components={{
-          Header: () => {
-            return (
-              <View>
-                <Heading>{createLivenessApiData}</Heading>
-                <Text>
-                  You will go through a face verification process to prove that
-                  you are a real person.
-                </Text>
-              </View>
-            )
-          },
-        }}
-      />
-      ): (
-        <p>Carregando...</p>
-      )}
-      { loading ? (
-        <h1>USER VERIFIED</h1>
-      ): (
-        <h1>USER WAS NOT VERIFIED</h1>
-      )}
-    </ThemeProvider>
+    <>
+    <>
+      {loading ? <h1>User verified</h1> : <h1>User not verified</h1>}
+    </>
+    <ThemeProvider theme={theme}>
+
+        {createLivenessApiData ? (
+          <FaceLivenessDetector
+            sessionId={createLivenessApiData}
+            region='us-east-1'
+            onAnalysisComplete={handleAnalysisComplete}
+            components={{
+              Header: () => {
+                return (
+                  <View>
+                    <Heading>{createLivenessApiData}</Heading>
+                    <Text>
+                      You will go through a face verification process to prove that
+                      you are a real person.
+                    </Text>
+                  </View>
+                );
+              },
+            }} />
+        ) : (
+          <p>Carregando...</p>
+        )}
+      </ThemeProvider></>
   );
 }
 
