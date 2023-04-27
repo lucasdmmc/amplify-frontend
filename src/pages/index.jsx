@@ -58,6 +58,8 @@ function App() {
         console.log(response)
         if (response.data.confidence > 90) {
           setLoading(true)
+        } if (!response.data.confidence > 90) {
+          setLoading(false)
         }
       })
     } catch (error) {
@@ -70,33 +72,37 @@ function App() {
   },[])
   return (
     <>
-    <>
-      {loading ? <h1>User verified</h1> : <h1>User not verified</h1>}
-    </>
-    <ThemeProvider theme={theme}>
+      <>
+        {loading ? 
+        <h1>User verified</h1> : (
+          <ThemeProvider theme={theme}>
 
-        {createLivenessApiData ? (
-          <FaceLivenessDetector
-            sessionId={createLivenessApiData}
-            region='us-east-1'
-            onAnalysisComplete={handleAnalysisComplete}
-            components={{
-              Header: () => {
-                return (
-                  <View>
-                    <Heading>{createLivenessApiData}</Heading>
-                    <Text>
-                      You will go through a face verification process to prove that
-                      you are a real person.
-                    </Text>
-                  </View>
-                );
-              },
-            }} />
-        ) : (
-          <p>Carregando...</p>
-        )}
-      </ThemeProvider></>
+          {createLivenessApiData ? (
+            <FaceLivenessDetector
+              sessionId={createLivenessApiData}
+              region='us-east-1'
+              onAnalysisComplete={handleAnalysisComplete}
+              components={{
+                Header: () => {
+                  return (
+                    <View>
+                      <Heading>{createLivenessApiData}</Heading>
+                      <Text>
+                        You will go through a face verification process to prove that
+                        you are a real person.
+                      </Text>
+                    </View>
+                  );
+                },
+              }} />
+          ) : (
+            <p>Carregando...</p>
+          )}
+        </ThemeProvider>
+        )
+      }
+      </>
+      </>
   );
 }
 
