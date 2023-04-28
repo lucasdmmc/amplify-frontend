@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Loader, ThemeProvider, useTheme, Theme, View, Heading, Text, Alert, Card } from '@aws-amplify/ui-react';
+import { ThemeProvider, useTheme, Theme, View, Heading, Text, Alert, Card } from '@aws-amplify/ui-react';
 import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
@@ -8,11 +8,9 @@ import { api } from '../services/api';
 
 Amplify.configure(awsExports);
 
-
-
 function App() {
-  const [createLivenessApiData, setCreateLivenessApiData] = useState("");
-  const [ loading, setLoading ] = useState(Boolean);
+  const [verified, setVerified] = useState(false);
+  const [createLivenessApiData, setCreateLivenessApiData] = useState(null);
   const { tokens } = useTheme();
 
   const theme = {
@@ -44,36 +42,44 @@ function App() {
     }
   }
 
+  const createSession = async () => {
+    try {
+      await api.get("/api/createSession")
+      .then(response => setCreateLivenessApiData(response.data.sessionId))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const handleAnalysisComplete = async () => {
+    console.log("Called analysisComplete")
     try {
       await api.get(`/api/getFaceLivenessResults?sessionId=${createLivenessApiData}`)
       .then(response => {
         console.log(response)
-        if (response.data.confidence > 90) {
-          setLoading(true)
-        } if (!response.data.confidence > 90) {
-          setLoading(false)
+        if (response.data.confidence >= 85) {
+          setVerified(true)
+        } else {
+          alert("User not verified! Please, try again")
+          window.location.reload(false)
         }
+        // console.log(response.data.status)
+        // if (response.data.status === "SUCCEEDED" || response.data.status === "FAILED" || response.data.status === "EXPIRED") {
+        //   createSession()
+        // }
       })
     } catch (error) {
-      console.log(error)
+      console.log("Catch error: "+error)
     }
   };
 
   useEffect(() => {
-    const fetchCreateLiveness = async () => {
-      
-      api.get("/api/createSession")
-      .then(response => setCreateLivenessApiData(response.data.sessionId))
-      
-    }
-    
-    fetchCreateLiveness();
+    createSession()
   },[])
   return (
     <>
       <>
-        {loading ? 
+        {verified ? 
         <h1>User verified</h1> : (
           <ThemeProvider theme={theme}>
 
