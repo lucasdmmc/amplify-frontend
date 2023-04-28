@@ -56,12 +56,12 @@ function App() {
   }
 
   const handleAnalysisComplete = async () => {
-    console.log("Called analysisComplete")
+    //console.log("Called analysisComplete")
     try {
       await api.get(`/api/getFaceLivenessResults?sessionId=${createLivenessApiData}`)
       .then(async response => {
         //Descomentar hoje
-        console.log(response)
+        //console.log(response)
         if (response.data.confidence >= 85) {
           setVerified(true)
           const byteData = Object.values(response.data.referenceImage.Bytes)
