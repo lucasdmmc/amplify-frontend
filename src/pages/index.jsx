@@ -58,7 +58,8 @@ function App() {
     try {
       await api.get(`/api/getFaceLivenessResults?sessionId=${createLivenessApiData}`)
       .then(response => {
-        console.log(response)
+        //Descomentar hoje
+        //console.log(response)
         if (response.data.confidence >= 85) {
           setVerified(true)
           // const referenceImageBytes = response.data.referenceImage.Bytes
