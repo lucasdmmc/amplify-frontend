@@ -1,7 +1,7 @@
 node_modules/
 .cache/
 public
-
+src\services\api.js
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*

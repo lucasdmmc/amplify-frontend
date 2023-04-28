@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { ThemeProvider, useTheme, Theme, View, Heading, Text, Alert, Card } from '@aws-amplify/ui-react';
+import { ThemeProvider, useTheme } from '@aws-amplify/ui-react';
 import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import awsExports from '../aws-exports';
 import { api } from '../services/api';
+import { Buffer } from 'buffer';
 
 Amplify.configure(awsExports);
 
 function App() {
   const [verified, setVerified] = useState(false);
   const [createLivenessApiData, setCreateLivenessApiData] = useState(null);
+  const [referenceImage, setReferenceImage] = useState(null);
   const { tokens } = useTheme();
 
   const theme = {
@@ -59,9 +61,18 @@ function App() {
         console.log(response)
         if (response.data.confidence >= 85) {
           setVerified(true)
+          // const referenceImageBytes = response.data.referenceImage.Bytes
+          // const referenceImageBytesAsArray = Object.keys(referenceImageBytes)
+          // const referenceImageBuffering = Buffer.from(referenceImageBytesAsArray)
+          // const blob = new Blob([referenceImageBuffering], {type: "image/jpeg"})
+          // const referenceImageURL = URL.createObjectURL(blob)
+          // console.log(referenceImageURL)
+          // setReferenceImage(referenceImageURL)
         } else {
           alert("User not verified! Please, try again")
-          window.location.reload(false)
+          setCreateLivenessApiData(null)
+          createSession()
+          // window.location.reload(false)
         }
         // console.log(response.data.status)
         // if (response.data.status === "SUCCEEDED" || response.data.status === "FAILED" || response.data.status === "EXPIRED") {
@@ -76,11 +87,14 @@ function App() {
   useEffect(() => {
     createSession()
   },[])
+
   return (
     <>
       <>
         {verified ? 
-        <h1>User verified</h1> : (
+        //<img src={referenceImage} alt="" />
+        <h1 style={{margin: "auto"}}>User is verified</h1>
+        : (
           <ThemeProvider theme={theme}>
 
           {createLivenessApiData ? (
@@ -88,21 +102,9 @@ function App() {
               sessionId={createLivenessApiData}
               region='us-east-1'
               onAnalysisComplete={handleAnalysisComplete}
-              components={{
-                Header: () => {
-                  return (
-                    <View>
-                      <Heading>{createLivenessApiData}</Heading>
-                      <Text>
-                        You will go through a face verification process to prove that
-                        you are a real person.
-                      </Text>
-                    </View>
-                  );
-                },
-              }} />
+            />
           ) : (
-            <p>Carregando...</p>
+            <p>Loading...</p>
           )}
         </ThemeProvider>
         )
