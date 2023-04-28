@@ -6,6 +6,7 @@ import '@aws-amplify/ui-react/styles.css';
 import awsExports from '../aws-exports';
 import { api } from '../services/api';
 import { Buffer } from 'buffer';
+import { ReferenceImage} from '../components/referenceImage'
 
 Amplify.configure(awsExports);
 
@@ -13,6 +14,7 @@ function App() {
   const [verified, setVerified] = useState(false);
   const [createLivenessApiData, setCreateLivenessApiData] = useState(null);
   const [referenceImage, setReferenceImage] = useState(null);
+  const [ confidence, setConfidence] = useState(null);
   const { tokens } = useTheme();
 
   const theme = {
@@ -57,25 +59,23 @@ function App() {
     console.log("Called analysisComplete")
     try {
       await api.get(`/api/getFaceLivenessResults?sessionId=${createLivenessApiData}`)
-      .then(response => {
+      .then(async response => {
         //Descomentar hoje
-        //console.log(response)
+        console.log(response)
         if (response.data.confidence >= 85) {
           setVerified(true)
-          // const referenceImageBytes = response.data.referenceImage.Bytes
-          // const referenceImageBytesAsArray = Object.keys(referenceImageBytes)
-          // const referenceImageBuffering = Buffer.from(referenceImageBytesAsArray)
-          // const blob = new Blob([referenceImageBuffering], {type: "image/jpeg"})
-          // const referenceImageURL = URL.createObjectURL(blob)
-          // console.log(referenceImageURL)
-          // setReferenceImage(referenceImageURL)
+          const byteData = Object.values(response.data.referenceImage.Bytes)
+          const buffer = Buffer.from(byteData)
+          const base64String = buffer.toString('base64')
+          const src = `data:image/jpeg;base64,${base64String}`
+          setReferenceImage(src)
+          setConfidence(response.data.confidence)
+          
         } else {
           alert("User not verified! Please, try again")
           setCreateLivenessApiData(null)
           createSession()
-          // window.location.reload(false)
         }
-        // console.log(response.data.status)
         // if (response.data.status === "SUCCEEDED" || response.data.status === "FAILED" || response.data.status === "EXPIRED") {
         //   createSession()
         // }
@@ -92,9 +92,14 @@ function App() {
   return (
     <>
       <>
-        {verified ? 
-        //<img src={referenceImage} alt="" />
-        <h1 style={{margin: "auto"}}>User is verified</h1>
+        {verified && referenceImage ? 
+        //<ReferenceImage src={{referenceImage}}/>
+        <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
+          <h1 style={{margin: "auto", color: "#07eb07"}}>The user is validated as a real person</h1>
+          <img src={referenceImage} alt="" style={{width: '400px', margin: "auto"}}/>
+          <h2 style={{margin: "auto"}}>Aproximated assurance: {Math.round(confidence)}%</h2>
+        </div>
+        //<h1 style={{margin: "auto"}}>User is verified</h1>
         : (
           <ThemeProvider theme={theme}>
 
