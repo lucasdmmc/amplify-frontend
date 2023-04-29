@@ -12,7 +12,7 @@ Amplify.configure(awsExports);
 
 function App() {
   const [verified, setVerified] = useState(false);
-  const [createLivenessApiData, setCreateLivenessApiData] = useState(null);
+  const [sessionId, setSessionId] = useState(null);
   const [referenceImage, setReferenceImage] = useState(null);
   const [ confidence, setConfidence] = useState(null);
   const { tokens } = useTheme();
@@ -49,7 +49,10 @@ function App() {
   const createSession = async () => {
     try {
       await api.get("/api/createSession")
-      .then(response => setCreateLivenessApiData(response.data.sessionId))
+      .then(response => {
+        const { sessionId } = response.data
+        setSessionId(sessionId)
+      })
     } catch (error) {
       console.log(error)
     }
@@ -58,7 +61,7 @@ function App() {
   const handleAnalysisComplete = async () => {
     //console.log("Called analysisComplete")
     try {
-      await api.get(`/api/getFaceLivenessResults?sessionId=${createLivenessApiData}`)
+      await api.get(`/api/getFaceLivenessResults?sessionId=${sessionId}`)
       .then(async response => {
         //Descomentar hoje
         //console.log(response)
@@ -69,11 +72,12 @@ function App() {
           const base64String = buffer.toString('base64')
           const src = `data:image/jpeg;base64,${base64String}`
           setReferenceImage(src)
-          setConfidence(response.data.confidence)
+          const { confidence } = response.data
+          setConfidence(confidence)
           
         } else {
           alert("User not verified! Please, try again")
-          setCreateLivenessApiData(null)
+          setSessionId(null)
           createSession()
         }
         // if (response.data.status === "SUCCEEDED" || response.data.status === "FAILED" || response.data.status === "EXPIRED") {
@@ -81,12 +85,14 @@ function App() {
         // }
       })
     } catch (error) {
-      console.log("Catch error: "+error)
+      console.log("Catch error: " + error)
     }
   };
 
   useEffect(() => {
-    createSession()
+    if(!sessionId) {
+      createSession()
+    }
   },[])
 
   return (
@@ -103,9 +109,9 @@ function App() {
         : (
           <ThemeProvider theme={theme}>
 
-          {createLivenessApiData ? (
+          {sessionId ? (
             <FaceLivenessDetector
-              sessionId={createLivenessApiData}
+              sessionId={sessionId}
               region='us-east-1'
               onAnalysisComplete={handleAnalysisComplete}
             />
