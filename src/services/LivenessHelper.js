@@ -14,7 +14,6 @@ export const createSessionId = async () => {
 export const handleAnalysisComplete = async (sessionId) => {
 
     const analysisResponse = await api.get(`/api/getFaceLivenessResults?sessionId=${sessionId}`)
-    console.log(analysisResponse)
 
     let responseTemplate = {
         verified: Boolean,
@@ -42,7 +41,6 @@ export const handleAnalysisComplete = async (sessionId) => {
     if(confidence >= 65) {
         try {
             const referenceImageSrc = await parseImageBytesToString(analysisResponse.data.referenceImage.Bytes)
-            console.log(referenceImageSrc)
             myResponse.referenceImageURL = referenceImageSrc
             myResponse.confidence = confidence
             myResponse.verified = true

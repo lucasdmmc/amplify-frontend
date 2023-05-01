@@ -32,20 +32,15 @@ function App() {
 
   const callCreateSession = async () => {
     if(sessionId) {
-
       setSessionId(null)
-      console.log("Session is null")
     }
     const sessionid = await createSessionId()
-    console.log("Session is created")
     setSessionId(sessionid)
-    console.log("Session is set")
   }
 
   const callHandleAnalysisComplete = async () => {
     try {
         const analysisResult = await handleAnalysisComplete(sessionId)
-        console.log(analysisResult)
         if(analysisResult.verified) {
           setVerified(true)
           setReferenceImage(analysisResult.referenceImageURL)
