@@ -47,6 +47,9 @@ function App() {
   }
 
   const createSession = async () => {
+
+    setSessionId(null)
+    
     try {
       await api.get("/api/createSession")
       .then(response => {
@@ -77,7 +80,6 @@ function App() {
           
         } else {
           alert("User not verified! Please, try again")
-          setSessionId(null)
           createSession()
         }
         // if (response.data.status === "SUCCEEDED" || response.data.status === "FAILED" || response.data.status === "EXPIRED") {
@@ -114,6 +116,8 @@ function App() {
               sessionId={sessionId}
               region='us-east-1'
               onAnalysisComplete={handleAnalysisComplete}
+              onUserCancel={() => createSession()}
+             
             />
           ) : (
             <p>Loading...</p>
