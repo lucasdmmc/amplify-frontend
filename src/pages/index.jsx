@@ -4,8 +4,8 @@ import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import awsExports from '../aws-exports';
-import { api } from '../services/api';
-import { Buffer } from 'buffer';
+import { handleAnalysisComplete, createSessionId } from '../services/LivenessHelper';
+
 import { ReferenceImage} from '../components/referenceImage'
 
 Amplify.configure(awsExports);
@@ -14,7 +14,7 @@ function App() {
   const [verified, setVerified] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const [referenceImage, setReferenceImage] = useState(null);
-  const [ confidence, setConfidence] = useState(null);
+  const [confidence, setConfidence] = useState(null);
   const { tokens } = useTheme();
 
   const theme = {
@@ -46,54 +46,40 @@ function App() {
     }
   }
 
-  const createSession = async () => {
+  const callCreateSession = async () => {
+    if(sessionId) {
 
-    setSessionId(null)
-    
-    try {
-      await api.get("/api/createSession")
-      .then(response => {
-        const { sessionId } = response.data
-        setSessionId(sessionId)
-      })
-    } catch (error) {
-      console.log(error)
+      setSessionId(null)
+      console.log("Session is null")
     }
+    const sessionid = await createSessionId()
+    console.log("Session is created")
+    setSessionId(sessionid)
+    console.log("Session is set")
   }
 
-  const handleAnalysisComplete = async () => {
-    //console.log("Called analysisComplete")
+  const callHandleAnalysisComplete = async () => {
     try {
-      await api.get(`/api/getFaceLivenessResults?sessionId=${sessionId}`)
-      .then(async response => {
-        //Descomentar hoje
-        //console.log(response)
-        if (response.data.confidence >= 85) {
+        const analysisResult = await handleAnalysisComplete(sessionId)
+        console.log(analysisResult)
+        if(analysisResult.verified) {
           setVerified(true)
-          const byteData = Object.values(response.data.referenceImage.Bytes)
-          const buffer = Buffer.from(byteData)
-          const base64String = buffer.toString('base64')
-          const src = `data:image/jpeg;base64,${base64String}`
-          setReferenceImage(src)
-          const { confidence } = response.data
-          setConfidence(confidence)
-          
+          setReferenceImage(analysisResult.referenceImageURL)
+          setConfidence(analysisResult.confidence)
         } else {
           alert("User not verified! Please, try again")
-          createSession()
+          callCreateSession()
         }
-        // if (response.data.status === "SUCCEEDED" || response.data.status === "FAILED" || response.data.status === "EXPIRED") {
-        //   createSession()
-        // }
-      })
-    } catch (error) {
-      console.log("Catch error: " + error)
+    } catch (error){
+        alert("It was not possible to handle the analysis results " + error)
+        callCreateSession()
     }
-  };
+  }
+  
 
   useEffect(() => {
     if(!sessionId) {
-      createSession()
+      callCreateSession()
     }
   },[])
 
@@ -115,8 +101,8 @@ function App() {
             <FaceLivenessDetector
               sessionId={sessionId}
               region='us-east-1'
-              onAnalysisComplete={handleAnalysisComplete}
-              onUserCancel={() => createSession()}
+              onAnalysisComplete={callHandleAnalysisComplete}
+              onUserCancel={() => callCreateSession()}
              
             />
           ) : (
