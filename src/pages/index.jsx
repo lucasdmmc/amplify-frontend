@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { ThemeProvider, useTheme } from '@aws-amplify/ui-react';
+import { ThemeProvider, useTheme, Alert } from '@aws-amplify/ui-react';
 import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import awsExports from '../aws-exports';
 import { handleAnalysisComplete, createSessionId } from '../services/LivenessHelper';
-
 import { ReferenceImage} from '../components/referenceImage'
+import { GlobalStyle } from '../styles/global';
 
 Amplify.configure(awsExports);
 
@@ -21,27 +21,11 @@ function App() {
     name: "Face Lucas",
     tokens: {
       colors: {
-        background: {
-          primary: {
-            value: tokens.colors.neutral["90"].value,
-          },
-          secondary: {
-            value: tokens.colors.neutral["90"].value,
-          },
-        },
         font: {
           primary: {
             value: tokens.colors.white.value,
           },
         },
-        brand: {
-          primary: {
-            "10": tokens.colors.teal["100"],
-            "80": tokens.colors.teal["40"],
-            "90": tokens.colors.teal["20"],
-            "100": tokens.colors.teal["10"],
-          }
-        }
       }
     }
   }
@@ -86,6 +70,7 @@ function App() {
   return (
     <>
       <>
+        <GlobalStyle />
         {verified && referenceImage ? 
         //<ReferenceImage src={{referenceImage}}/>
         <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
@@ -99,11 +84,27 @@ function App() {
 
           {sessionId ? (
             <FaceLivenessDetector
-              sessionId={sessionId}
-              region='us-east-1'
-              onAnalysisComplete={callHandleAnalysisComplete}
-              onUserCancel={() => callCreateSession()}
-             
+            sessionId={sessionId}
+            region='us-east-1'
+            onAnalysisComplete={callHandleAnalysisComplete}
+            onUserCancel={() => callCreateSession()}
+              components={{
+                PhotosensitiveWarning: () => {
+                  return (
+                    <Alert
+                      backgroundColor={"#e7c35e"}
+                      variation='info'
+                      isDismissible={false}
+                      hasIcon={true}
+                      heading="Caution"
+                    >
+                    This check displays colored lights. Use caution if you are
+                    photosensitive.
+                   </Alert>
+                  )
+                },
+              }}
+
             />
           ) : (
             <p>Loading...</p>
