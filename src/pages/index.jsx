@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ThemeProvider, useTheme, Alert, Card } from '@aws-amplify/ui-react';
+import { ThemeProvider, useTheme, Alert } from '@aws-amplify/ui-react';
 import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';

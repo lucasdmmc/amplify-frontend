@@ -19,15 +19,4 @@ export const GlobalStyle = createGlobalStyle`
     background-repeat: no-repeat;
     background-position: center;
   }
-
-  /* .amplify-text {
-  } 
-
-  .amplify-flex .amplify-liveness-toast__message {
-    color: black !important;
-  }
-
-  .amplify-flex .amplify-liveness-instruction-overlay {
-    color: red !important;
-  } */
 `;
