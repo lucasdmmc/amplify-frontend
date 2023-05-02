@@ -20,15 +20,14 @@ export const GlobalStyle = createGlobalStyle`
     background-position: center;
   }
 
-  p.amplify-text {
-    /* color: red !important; */
+  /* .amplify-text {
+  } 
+
+  .amplify-flex .amplify-liveness-toast__message {
+    color: black !important;
   }
 
-  /* .amplify-flex .amplify-liveness-toast__message {
-    color: black !important;
-  } */
-
-  /* .amplify-flex .amplify-liveness-instruction-overlay {
+  .amplify-flex .amplify-liveness-instruction-overlay {
     color: red !important;
   } */
 `;
