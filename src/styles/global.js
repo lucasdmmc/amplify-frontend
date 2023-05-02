@@ -19,4 +19,8 @@ export const GlobalStyle = createGlobalStyle`
     background-repeat: no-repeat;
     background-position: center;
   }
+
+  .amplify-alert {
+    background: #e7c35e !important;
+  }
 `;
