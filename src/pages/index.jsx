@@ -79,7 +79,6 @@ function App() {
 
   return (
     <>
-      <>
         <GlobalStyle />
         {verified && referenceImage ? 
         //<ReferenceImage src={{referenceImage}}/>
@@ -91,29 +90,28 @@ function App() {
         //<h1 style={{margin: "auto"}}>User is verified</h1>
         : (
           <ThemeProvider theme={theme}>
-
           {sessionId ? (
             <FaceLivenessDetector
             sessionId={sessionId}
             region='us-east-1'
             onAnalysisComplete={callHandleAnalysisComplete}
             onUserCancel={() => callCreateSession()}
-              components={{
-                PhotosensitiveWarning: () => {
-                  return (
-                    <Alert
-                      backgroundColor={"#e7c35e"}
-                      variation='info'
-                      isDismissible={false}
-                      hasIcon={true}
-                      heading="Caution"
-                    >
-                    This check displays colored lights. Use caution if you are
-                    photosensitive.
-                   </Alert>
-                  )
-                },
-              }}
+            components={{
+              PhotosensitiveWarning: () => {
+                return (
+                  <Alert
+                    backgroundColor={"#e7c35e"}
+                    variation='info'
+                    isDismissible={false}
+                    hasIcon={true}
+                    heading="Caution"
+                  >
+                  This check displays colored lights. Use caution if you are
+                  photosensitive.
+                  </Alert>
+                )
+              },
+            }}
             />
           ) : (
             <p>Loading...</p>
@@ -121,7 +119,6 @@ function App() {
         </ThemeProvider>
         )
       }
-      </>
       </>
   );
 }
