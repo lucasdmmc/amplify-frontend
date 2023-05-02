@@ -5,7 +5,6 @@ import { Amplify } from 'aws-amplify';
 import '@aws-amplify/ui-react/styles.css';
 import awsExports from '../aws-exports';
 import { handleAnalysisComplete, createSessionId } from '../services/LivenessHelper';
-import { ReferenceImage} from '../components/referenceImage'
 import { GlobalStyle } from '../styles/global';
 
 Amplify.configure(awsExports);

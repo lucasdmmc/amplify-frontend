@@ -3,7 +3,7 @@ import backgroundImg from '../images/background.png';
 
 
 export const GlobalStyle = createGlobalStyle`
-  button {
+  .amplify-button--primary {
     background-color: #8c4599 !important;
     color: white;
     border: none;
@@ -19,4 +19,16 @@ export const GlobalStyle = createGlobalStyle`
     background-repeat: no-repeat;
     background-position: center;
   }
+
+  p.amplify-text {
+    /* color: red !important; */
+  }
+
+  /* .amplify-flex .amplify-liveness-toast__message {
+    color: black !important;
+  } */
+
+  /* .amplify-flex .amplify-liveness-instruction-overlay {
+    color: red !important;
+  } */
 `;
