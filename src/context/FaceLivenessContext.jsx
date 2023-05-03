@@ -41,6 +41,11 @@ export const FaceLivenessProvider = ({ children }) => {
     },
   };
 
+
+  const sendResultToParentWindow = (windowObj, payload) => {
+      windowObj.postMessage(payload, "*")
+  }
+
   const createSessionId = async () => {
     try {
       const response = await api.get("/api/createSession")
@@ -92,12 +97,15 @@ export const FaceLivenessProvider = ({ children }) => {
   const callHandleAnalysisComplete = async () => {
     try {
         const analysisResult = await handleAnalysisComplete(sessionId)
+        const parentWindow = window.parent
         if(analysisResult.verified) {
           setVerified(true)
           setReferenceImage(analysisResult.referenceImageURL)
           setConfidence(analysisResult.confidence)
+          sendResultToParentWindow(parentWindow, "verified")
         } else {
-          alert("User not verified! Please, try again")
+          sendResultToParentWindow(parentWindow, "invalid")
+          //alert("User not verified! Please, try again")
           callCreateSession()
         }
     } catch (error){
