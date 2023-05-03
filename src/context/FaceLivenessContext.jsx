@@ -50,7 +50,7 @@ export const FaceLivenessProvider = ({ children }) => {
     } catch (error) {
       console.log(error)
     }
-}
+  }
 
   const callCreateSession = async () => {
     if(sessionId) {
@@ -90,7 +90,7 @@ export const FaceLivenessProvider = ({ children }) => {
     }
 
     return myResponse
-};
+  };
 
   const callHandleAnalysisComplete = async () => {
     try {
@@ -120,7 +120,7 @@ export const FaceLivenessProvider = ({ children }) => {
         console.log("It was not possible to parse the referenceImage: " + error)   
     }
    
-}
+  }
 
   useEffect(() => {
     if(!sessionId) {
