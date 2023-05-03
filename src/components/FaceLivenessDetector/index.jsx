@@ -5,7 +5,6 @@ import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 import { useFaceLiveness } from '../../hook/useFaceLiveness';
 import { Loading, ReferenceImage } from './styles';
 
-
 export const FaceLiveness = () => {
   const {
     theme,

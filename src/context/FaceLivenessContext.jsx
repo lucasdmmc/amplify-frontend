@@ -3,7 +3,6 @@ import { api } from "../services/api";
 import { Buffer } from 'buffer';
 import { useTheme } from '@aws-amplify/ui-react';
 
-
 export const FaceLivenessContext = createContext()
 
 export const FaceLivenessProvider = ({ children }) => {
@@ -71,8 +70,6 @@ export const FaceLivenessProvider = ({ children }) => {
     }
 
     let myResponse = responseTemplate
-
-
 
     const { confidence } = analysisResponse.data
 
