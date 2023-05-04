@@ -86,9 +86,9 @@ export const FaceLivenessProvider = ({ children }) => {
   
       if (analysisResult.verified) {
         setVerified(true)
-        sendResultToParentWindow(parentWindow, "verified")
+        sendResultToParentWindow(parentWindow, "Verified")
       } else {
-        sendResultToParentWindow(parentWindow, "invalid")
+        sendResultToParentWindow(parentWindow, "Unverified")
         alert("User not verified! Please, try again")
         callCreateSession()
       }
