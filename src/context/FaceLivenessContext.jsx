@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
 import { api } from "../services/api";
-import { Buffer } from 'buffer';
 import { useTheme } from '@aws-amplify/ui-react';
 
 export const FaceLivenessContext = createContext()
@@ -8,8 +7,6 @@ export const FaceLivenessContext = createContext()
 export const FaceLivenessProvider = ({ children }) => {
   const [verified, setVerified] = useState(false);
   const [sessionId, setSessionId] = useState(null);
-  const [confidence, setConfidence] = useState(null);
-  const [referenceImage, setReferenceImage] = useState(null);
   const { tokens } = useTheme();
 
   const theme = {
@@ -41,91 +38,66 @@ export const FaceLivenessProvider = ({ children }) => {
     },
   };
 
-
   const sendResultToParentWindow = (windowObj, payload) => {
       windowObj.postMessage(payload, "*")
   }
 
   const createSessionId = async () => {
     try {
-      const response = await api.get("/api/createSession")
-      const { sessionId } = response.data
-      return sessionId
+      const response = await api.get('/api/createSession')
+      return response.data.sessionId
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
-  }
+  };
 
   const callCreateSession = async () => {
-    if(sessionId) {
+    if (sessionId) {
       setSessionId(null)
     }
-    const sessionid = await createSessionId()
-    setSessionId(sessionid)
-  }
+  
+    const newSessionId = await createSessionId()
+    setSessionId(newSessionId)
+  };
 
   const handleAnalysisComplete = async (sessionId) => {
-
     const analysisResponse = await api.get(`/api/getFaceLivenessResults?sessionId=${sessionId}`)
-
-    let responseTemplate = {
-        verified: Boolean,
-        referenceImageURL: String,
-        confidence: String,
-    }
-
-    let myResponse = responseTemplate
-
     const { confidence } = analysisResponse.data
-
-    if(confidence >= 65) {
-        try {
-            const referenceImageSrc = await parseImageBytesToString(analysisResponse.data.referenceImage.Bytes)
-            myResponse.referenceImageURL = referenceImageSrc
-            myResponse.confidence = confidence
-            myResponse.verified = true
-        } catch (error) {
-            console.log("It was not possible to set either referenceImageURL, confidence or verified fields: " + error)
-        }
-    } else {
-        myResponse.verified = false
+  
+    let responseTemplate = { verified: false, confidence }
+    let myResponse = { ...responseTemplate }
+  
+    if (confidence >= 65) {
+      try {
+        myResponse.confidence = confidence
+        myResponse.verified = true
+      } catch (error) {
+        console.log(`It was not possible to set either referenceImageURL, confidence, or verified fields: ${error}`)
+      }
     }
-
+  
     return myResponse
   };
 
   const callHandleAnalysisComplete = async () => {
     try {
-        const analysisResult = await handleAnalysisComplete(sessionId)
-        const parentWindow = window.parent
-        if(analysisResult.verified) {
-          setVerified(true)
-          setReferenceImage(analysisResult.referenceImageURL)
-          setConfidence(analysisResult.confidence)
-          sendResultToParentWindow(parentWindow, "verified")
-        } else {
-          sendResultToParentWindow(parentWindow, "invalid")
-          //alert("User not verified! Please, try again")
-          callCreateSession()
-        }
-    } catch (error){
-        alert("It was not possible to handle the analysis results " + error)
+      const analysisResult = await handleAnalysisComplete(sessionId)
+      const parentWindow = window.parent
+  
+      if (analysisResult.verified) {
+        setVerified(true)
+        sendResultToParentWindow(parentWindow, "verified")
+      } else {
+        sendResultToParentWindow(parentWindow, "invalid")
+        alert("User not verified! Please, try again")
         callCreateSession()
-    }
-  }
-
-  const parseImageBytesToString = async (imageBytes) => {
-    try {
-        const byteData = Object.values(imageBytes)
-        const buffer = Buffer.from(byteData)
-        const base64String = buffer.toString('base64')
-        const src = `data:image/jpeg;base64,${base64String}`
-        return src
+      }
     } catch (error) {
-        console.log("It was not possible to parse the referenceImage: " + error)   
+      alert(`It was not possible to handle the analysis results: ${error}`)
+      callCreateSession()
     }
-   
-  }
+  };
+  
 
   useEffect(() => {
     if(!sessionId) {
@@ -138,8 +110,6 @@ export const FaceLivenessProvider = ({ children }) => {
       theme,
       verified,
       sessionId, 
-      confidence,
-      referenceImage,
       callCreateSession,
       callHandleAnalysisComplete,
     }}>

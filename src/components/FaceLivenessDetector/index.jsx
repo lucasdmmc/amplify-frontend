@@ -1,44 +1,38 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { GlobalStyle } from '../../styles/global';
 import { ThemeProvider, Loader } from '@aws-amplify/ui-react';
 import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 import { useFaceLiveness } from '../../hook/useFaceLiveness';
-import { Loading, ReferenceImage } from './styles';
+import { Loading } from './styles';
 
 export const FaceLiveness = () => {
   const {
     theme,
     verified, 
     sessionId, 
-    confidence, 
-    referenceImage, 
-    callCreateSession, 
+    callCreateSession,
     callHandleAnalysisComplete, 
   } = useFaceLiveness()
   
   return (
-    <>
+    <Fragment>
       <GlobalStyle />
-      {verified && referenceImage ? (
-        <ReferenceImage>
-          <h1>The user is validated as a real person</h1>
-          <img src={referenceImage} alt="" />
-          <h2>Aproximated assurance: {Math.round(confidence)}%</h2>
-        </ReferenceImage>
-      ) : sessionId ? (
+      {verified && <h1>Verificado</h1>}
+      {sessionId && !verified && (
         <ThemeProvider theme={theme}>
           <FaceLivenessDetector
             sessionId={sessionId}
             region='us-east-1'
             onAnalysisComplete={callHandleAnalysisComplete}
-            onUserCancel={() => callCreateSession()}
+            onUserCancel={callCreateSession}
           />
         </ThemeProvider>
-      ) : (
+      )}
+      {!sessionId && (
         <Loading>
           <Loader />
         </Loading>
       )}
-    </>
+    </Fragment>
   );
 }
