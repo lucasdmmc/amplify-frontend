@@ -17,7 +17,6 @@ export const FaceLiveness = () => {
   return (
     <Fragment>
       <GlobalStyle />
-      {verified && <h1>Verificado</h1>}
       {sessionId && !verified && (
         <ThemeProvider theme={theme}>
           <FaceLivenessDetector
