@@ -39,11 +39,8 @@ export const FaceLivenessProvider = ({ children }) => {
   };
 
   const createSessionId = async () => {
-    console.log('creating session...')
     try {
       const response = await api.get('/api/createSession')
-      console.log("Created the session object: ")
-      console.log(response)
       return response.data.sessionId
     } catch (error) {
       console.error(error)
@@ -56,7 +53,6 @@ export const FaceLivenessProvider = ({ children }) => {
     }
   
     const newSessionId = await createSessionId()
-    console.log('session created! Setting session Id... :' + newSessionId)
     setSessionId(newSessionId)
   };
 
