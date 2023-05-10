@@ -1,6 +1,6 @@
 {
   "auth": {
-    "faceliveness03aa539e": {
+    "facelivenessbackendbfdb53fd": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -16,9 +16,11 @@
           "EMAIL"
         ],
         "socialProviders": [],
-        "usernameAttributes": [],
-        "verificationMechanisms": [
+        "usernameAttributes": [
           "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "PHONE_NUMBER"
         ]
       },
       "providerPlugin": "awscloudformation",
