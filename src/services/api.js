@@ -3,5 +3,5 @@ import axios from "axios"
 // https://faceliveness-api.onrender.com
 export const api = axios.create({
   //baseURL: "http://localhost:3000"
-  baseURL: "https://faceliveness-api.onrender.com"
+  baseURL: "https://quiet-forest-81679.herokuapp.com/"
 })
