@@ -83,8 +83,12 @@ export const FaceLivenessProvider = ({ children }) => {
       if (analysisResult.verified) {
         setVerified(true)
         const query = "?verified=true"
-        console.log(window.location.href + query)
-        window.location.href = window.location.href + query
+
+        const urlVerified = window.location.href.includes('?verified=true')
+        if (!urlVerified) {
+          const newUrl = window.location.href + query
+          window.history.replaceState(null, '', newUrl)
+        }
       } else {
         alert("User not verified! Please, try again")
         callCreateSession()
