@@ -8,7 +8,6 @@ export const FaceLivenessProvider = ({ children }) => {
   const [verified, setVerified] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const { tokens } = useTheme();
-
   const theme = {
     name: 'Face Liveness Example Theme',
     tokens: {
@@ -90,8 +89,17 @@ export const FaceLivenessProvider = ({ children }) => {
           window.history.replaceState(null, '', newUrl)
         }
       } else {
-        alert("User not verified! Please, try again")
-        callCreateSession()
+        setVerified(true)
+
+        const query = "?verified=false"
+
+        const urlIsNotVerified = window.location.href.includes('?verified=false')
+        if (!urlIsNotVerified) {
+          const newUrl = window.location.href + query
+          window.history.replaceState(null, '', newUrl)
+        }
+        // alert("User not verified! Please, try again")
+        // callCreateSession()
       }
     } catch (error) {
       alert(`It was not possible to handle the analysis results: ${error}`)
@@ -99,7 +107,6 @@ export const FaceLivenessProvider = ({ children }) => {
     }
   };
   
-
   useEffect(() => {
     if(!sessionId) {
       callCreateSession()
