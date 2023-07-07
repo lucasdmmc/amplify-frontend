@@ -81,23 +81,21 @@ export const FaceLivenessProvider = ({ children }) => {
   
       if (analysisResult.verified) {
         setVerified(true)
-        const query = "?verified=true"
+        let query = window.location.search;
+        let newQuery = query + "?verified=true";
+        window.history.replaceState({}, '', window.location.pathname + newQuery);
+        // const query = "?verified=true"
 
-        const urlVerified = window.location.href.includes('?verified=true')
-        if (!urlVerified) {
-          const newUrl = window.location.href + query
-          window.history.replaceState(null, '', newUrl)
-        }
+        // const urlVerified = window.location.href.includes('?verified=true')
+        // if (!urlVerified) {
+        //   const newUrl = window.location.href + query
+        //   window.history.replaceState(null, '', newUrl)
+        // }
       } else {
-        setVerified(true)
-
-        const query = "?verified=false"
-
-        const urlIsNotVerified = window.location.href.includes('?verified=false')
-        if (!urlIsNotVerified) {
-          const newUrl = window.location.href + query
-          window.history.replaceState(null, '', newUrl)
-        }
+          setVerified(true)
+          let query = window.location.search;
+          let newQuery = query + "?verified=false";
+          window.history.replaceState({}, '', window.location.pathname + newQuery);
         // alert("User not verified! Please, try again")
         // callCreateSession()
       }
