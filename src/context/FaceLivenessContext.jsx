@@ -83,7 +83,7 @@ export const FaceLivenessProvider = ({ children }) => {
         setVerified(true)
         let query = window.location.search;
         let newQuery = query + "?verified=true";
-        window.history.replaceState({}, '', window.location.pathname + newQuery);
+        window.history.pushState({}, '', window.location.pathname + newQuery);
         // const query = "?verified=true"
 
         // const urlVerified = window.location.href.includes('?verified=true')
@@ -95,7 +95,7 @@ export const FaceLivenessProvider = ({ children }) => {
           setVerified(true)
           let query = window.location.search;
           let newQuery = query + "?verified=false";
-          window.history.replaceState({}, '', window.location.pathname + newQuery);
+          window.history.pushState({}, '', window.location.pathname + newQuery);
         // alert("User not verified! Please, try again")
         // callCreateSession()
       }
