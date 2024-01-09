@@ -11,6 +11,9 @@ export const FaceLivenessProvider = ({ children }) => {
   const theme = {
     name: 'Face Liveness Example Theme',
     tokens: {
+      components: {
+        
+      },
       colors: {
         background: {
           primary: {
