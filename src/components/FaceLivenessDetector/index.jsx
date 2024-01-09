@@ -122,7 +122,7 @@ export const FaceLiveness = () => {
                         <li>When an oval appears, fill the oval with your face within 7 seconds.</li>
                         <li>Maximize your screen's brightness.</li>
                         <li>Make sure your face is not convered with sunglasses or a mask.</li>
-                        <li>Move yo a weel-fit place that is not in direct sunlight.</li>
+                        <li>Move yo a weel-lit place that is not in direct sunlight.</li>
                        
                       </ol>
                     </OvalAppearsContainer>
