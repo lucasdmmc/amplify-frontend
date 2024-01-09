@@ -118,7 +118,13 @@ export const FaceLiveness = () => {
                     </FaceExempleContainer>
                     <OvalAppearsContainer>
                       <span>This photo will not be used on your profile!</span>
-                      <span style={{ marginTop: 14, paddingLeft: 10 }}>1. When an oval appears</span>
+                      <ol style={{ marginTop: 14, paddingLeft: 30, display: "flex", flexDirection: "column", gap: 16 }}>
+                        <li>When an oval appears, fill the oval with your face within 7 seconds.</li>
+                        <li>Maximize your screen's brightness.</li>
+                        <li>Make sure your face is not convered with sunglasses or a mask.</li>
+                        <li>Move yo a weel-fit place that is not in direct sunlight.</li>
+                       
+                      </ol>
                     </OvalAppearsContainer>
 
                     <span style={{ marginTop: 12, fontWeight: 'bold', textDecoration: "underline", cursor: "pointer" }}>
